@@ -32,7 +32,33 @@ class Enemy(Person):
         print('Ouch! Enemy attack')
 
 
-turn = True
+class Fight:
+
+    def __init__(self, fighter1, fighter2):
+        self._fighter1 = fighter1
+        self._fighter2 = fighter2
+
+
+    def _fighter_attack(self, attacker, defender):
+        attacker.attack(defender)
+
+
+    def _game_status(self, at, de):
+        if de.health == 0:
+            print(f'Game over!{at.say()} win')
+            return True
+        else:
+            print(f'{at.say()} attacked! {de.say()} has {de.health} health.')
+            return False
+
+
+    def start_fight(self):
+        while True:
+            self._fighter_attack(self._fighter1, self._fighter2)
+            if self._game_status(self._fighter1, self._fighter2):
+                break
+            self._fighter1, self._fighter2 = self._fighter2, self._fighter1
+
 
 l = input('Введите здоровье, урон и броню игрока:').split()
 player = Player(int(l[0]), int(l[1]), float(l[2]))
@@ -40,18 +66,5 @@ player = Player(int(l[0]), int(l[1]), float(l[2]))
 l = input('Введите здоровье, урон и броню противника:').split()
 enemy = Enemy(int(l[0]), int(l[1]), float(l[2]))
 
-while True:
-    person1 = player
-    person2 = enemy
-
-    if not turn:
-        person1, person2 = person2, person1
-
-    person1.attack(person2)
-    turn = turn ^ 1
-
-    if person2.health == 0:
-        print(f'Game Over! {person1.say()} win!')
-        break;
-    else:
-        print(f'{person2.say()} health is {person2.health}')
+epic_figth = Fight(player, enemy)
+epic_figth.start_fight()
